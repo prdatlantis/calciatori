@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Album Figurine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 400px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main App */
+        .app {
+            display: none;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: translateY(-2px);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stats-widget {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.3s ease;
+        }
+
+        .stats-widget:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats-label {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Redeem Page */
+        .redeem-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Buy Cards Page */
+        .buy-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            text-align: center;
+        }
+
+        .contact-info {
+            margin: 30px 0;
+            font-size: 1.2rem;
+        }
+
+        .contact-link {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Trade Page */
+        .trade-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .trade-section {
+            margin-bottom: 30px;
+        }
+
+        .trade-section-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #4ecdc4;
+        }
+
+        .user-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .user-item.selected {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        }
+
+        .card-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .trade-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: calc(33% - 10px);
+        }
+
+        .trade-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .trade-card.selected {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        }
+
+        .trade-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .trade-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .accept-btn {
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+        }
+
+        .reject-btn {
+            background: linear-gradient(45deg, #f44336, #c62828);
+            color: white;
+        }
+
+        .pending-trades {
+            margin-top: 40px;
+        }
+
+        .trade-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .trade-info {
+            margin-bottom: 15px;
+        }
+
+        /* Album */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .team-stats {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .stats-number {
+                font-size: 2.5rem;
+            }
+
+            .trade-card {
+                width: calc(50% - 10px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .trade-card {
+                width: 100%;
+            }
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-title">Accedi all'Album</div>
+      <div class="form-group">
+        <label for="username">Nome Utente</label>
+        <input type="text" id="username" placeholder="Inserisci il tuo nome utente" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Inserisci la password" />
+      </div>
+      <button class="btn" onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <div class="app" id="mainApp">
+    <div class="navbar">
+      <div class="logo">ALBUM CALCIATORI</div>
+      <div class="nav-links">
+        <div class="nav-link active" onclick="showPage('dashboard', event)">Dashboard</div>
+        <div class="nav-link" onclick="showPage('redeem', event)">Inserisci Codice</div>
+        <div class="nav-link" onclick="showPage('album', event)">Album</div>
+        <div class="nav-link" onclick="showPage('trade', event)">Scambi</div>
+        <div class="nav-link" onclick="showPage('buy', event)">Contatti</div>
+        <div class="nav-link" onclick="logout()">Logout</div>
+      </div>
+    </div>
+
+    <div id="dashboard" class="page active">
+      <h2 class="page-title">Benvenuto!</h2>
+      <div class="stats-widget">
+        <div class="stats-number" id="cardsCount">0</div>
+        <div class="stats-label">Figurine raccolte</div>
+      </div>
+      <div class="stats-widget">
+        <div class="stats-number" id="duplicatesCount">0</div>
+        <div class="stats-label">Doppioni</div>
+      </div>
+    </div>
+
+    <div id="redeem" class="page">
+      <h2 class="page-title">Inserisci Codice</h2>
+      <div class="redeem-form">
+        <input class="code-input" id="redeemCode" placeholder="Inserisci il codice..." />
+        <button class="btn" onclick="redeemCode()">Riscatta</button>
+        <div id="redeemMessage"></div>
+      </div>
+    </div>
+
+    <div id="album" class="page">
+      <h2 class="page-title">Il Tuo Album</h2>
+      <div class="teams-grid" id="albumGrid"></div>
+    </div>
+
+    <div id="trade" class="page">
+      <h2 class="page-title">Scambi</h2>
+      <div class="trade-container">
+        <div class="trade-section">
+          <h3 class="trade-section-title">Seleziona un utente</h3>
+          <div class="user-list" id="userList"></div>
+        </div>
+
+        <div class="trade-section" id="offerSection" style="display: none;">
+          <h3 class="trade-section-title">Seleziona la tua carta da offrire</h3>
+          <div class="card-selection" id="myCardsSelection"></div>
+        </div>
+
+        <div class="trade-section" id="requestSection" style="display: none;">
+          <h3 class="trade-section-title">Seleziona la carta che vuoi ricevere</h3>
+          <div class="card-selection" id="theirCardsSelection"></div>
+        </div>
+
+        <div class="trade-actions" id="tradeActions" style="display: none;">
+          <button class="trade-btn accept-btn" onclick="proposeTrade()">Proponi scambio</button>
+        </div>
+
+        <div class="pending-trades" id="pendingTradesSection">
+          <h3 class="trade-section-title">Scambi in attesa</h3>
+          <div id="pendingTradesList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="buy" class="page">
+      <h2 class="page-title">Comprare Codici</h2>
+      <div class="buy-info">
+        <div class="contact-info">
+          Contatta <a target="_blank">Discord: @alberto_94746
+                                      Telegram: @EspoAlberto
+          </a> per acquistare pacchetti!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Lista codici validi - scrivi qui i codici generati dal bot telegram
+    const validCodes = [
+      "AB12CD34"
+    ];
+
+    // Lista di squadre e giocatori aggiornata
+    const teams = [
+      { name: "Milan", players: ["Paolo Maldini", "Franco Baresi", "Andriy Shevchenko", "Kaká", "Zlatan Ibrahimović", "Alessandro Nesta", "Clarence Seedorf", "Andrea Pirlo", "Filippo Inzaghi", "Gennaro Gattuso", "Theo Hernández", "Rafael Leão"] },
+      { name: "Inter", players: ["Javier Zanetti", "Giuseppe Meazza", "Ronaldo", "Diego Milito", "Esteban Cambiasso", "Lautaro Martínez", "Romelu Lukaku", "Mauro Icardi", "Dejan Stanković", "Wesley Sneijder", "Nicolo Barella", "Hakan Çalhanoğlu"] },
+      { name: "Juventus", players: ["Alessandro Del Piero", "Gianluigi Buffon", "Pavel Nedvěd", "Andrea Pirlo", "David Trezeguet", "Zinedine Zidane", "Cristiano Ronaldo", "Carlos Tevez", "Leonardo Bonucci", "Giorgio Chiellini", "Paul Pogba", "Federico Chiesa"] },
+      { name: "Napoli", players: ["Diego Maradona", "Edinson Cavani", "Dries Mertens", "Lorenzo Insigne", "Kalidou Koulibaly", "Marek Hamšík", "Victor Osimhen", "Khvicha Kvaratskhelia", "José Callejón", "Fabian Ruiz", "Zambo Anguissa", "Giovanni Di Lorenzo"] },
+      { name: "Roma", players: ["Francesco Totti", "Daniele De Rossi", "Gabriel Batistuta", "Cafu", "Bruno Conti", "Edin Džeko", "Mohamed Salah", "Paulo Dybala", "Lorenzo Pellegrini", "Radja Nainggolan", "Alisson Becker", "Miralem Pjanić"] },
+      { name: "Lazio", players: ["Alessandro Nesta", "Pavel Nedvěd", "Miroslav Klose", "Ciro Immobile", "Hernanes", "Lucas Leiva", "Tommaso Rocchi", "Felipe Anderson", "Dejan Stanković", "Sinisa Mihajlovic", "Juan Sebastián Verón", "Sergej Milinković-Savić"] },
+      { name: "Fiorentina", players: ["Gabriel Batistuta", "Rui Costa", "Roberto Baggio", "Giancarlo Antognoni", "Luca Toni", "Federico Chiesa", "Stevan Jovetić", "Dusan Vlahović", "Gaetano Castrovilli", "Cristiano Biraghi", "Riccardo Sottil", "Arthur Melo"] },
+      { name: "Atalanta", players: ["Cristiano Doni", "Alejandro Gómez", "Josip Iličić", "Duván Zapata", "Luis Muriel", "Teun Koopmeiners", "Gianluca Mancini", "Matteo Pessina", "Remo Freuler", "Hans Hateboer", "Davide Zappacosta", "Rasmus Højlund"] },
+      { name: "Torino", players: ["Andrea Belotti", "Paolo Pulici", "Francesco Graziani", "Valentino Mazzola", "Giorgio Ferrini", "Rolando Bianchi", "Bruno Peres", "Danilo D'Ambrosio", "Matteo Darmian", "Alessandro Buongiorno", "Samuele Ricci", "Vanja Milinković-Savić"] },
+      { name: "Cagliari", players: ["Gigi Riva", "Enzo Francescoli", "David Suazo", "Gianfranco Zola", "Luigi Riva", "Marco Sau", "Diego López", "Alessandro Matri", "João Pedro", "Nicolò Barella", "Radja Nainggolan", "Leonardo Pavoletti"] },
+      { name: "Manchester City", players: ["Sergio Agüero", "Vincent Kompany", "David Silva", "Kevin De Bruyne", "Yaya Touré", "Raheem Sterling", "Bernardo Silva", "Phil Foden", "Erling Haaland", "Rúben Dias", "Kyle Walker", "Ederson"] },
+      { name: "Real Madrid", players: ["Cristiano Ronaldo", "Zinedine Zidane", "Raúl", "Sergio Ramos", "Iker Casillas", "Luka Modrić", "Karim Benzema", "Toni Kroos", "Vinicius Jr.", "Ferland Mendy", "Thibaut Courtois", "Eden Hazard"] },
+      { name: "FC Bayern Monaco", players: ["Franz Beckenbauer", "Gerd Müller", "Thomas Müller", "Manuel Neuer", "Robert Lewandowski", "Philipp Lahm", "Bastian Schweinsteiger", "Arjen Robben", "Franck Ribéry", "Joshua Kimmich", "Leroy Sané", "Kingsley Coman"] },
+      { name: "FC Barcellona", players: ["Lionel Messi", "Xavi", "Andrés Iniesta", "Johan Cruyff", "Ronaldinho", "Gerard Piqué", "Carles Puyol", "Sergio Busquets", "Pedri", "Ansu Fati", "Frenkie de Jong", "Marc-André ter Stegen"] },
+      { name: "Liverpool", players: ["Steven Gerrard", "Mohamed Salah", "Virgil van Dijk", "Sadio Mané", "Kenny Dalglish", "Ian Rush", "Trent Alexander-Arnold", "Alisson Becker", "Roberto Firmino", "Jordan Henderson", "Thiago Alcântara", "Luis Suárez"] },
+      { name: "PSG", players: ["Kylian Mbappé", "Neymar", "Lionel Messi", "Zlatan Ibrahimović", "Marco Verratti", "Thiago Silva", "Ángel Di María", "Sergio Ramos", "Gianluigi Donnarumma", "Achraf Hakimi", "Nuno Mendes", "Marquinhos"] }
+    ];
+
+    // Variabili globali
+    let currentUser = null;
+    let usersData = JSON.parse(localStorage.getItem("usersData")) || {};
+    let selectedTradeUser = null;
+    let selectedOfferCard = null;
+    let selectedRequestCard = null;
+
+function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  if (!username || !password) {
+    alert("Inserisci nome utente e password");
+    return;
+  }
+
+  // Se l'utente non esiste, crea un nuovo account
+  if (!usersData[username]) {
+    usersData[username] = {
+      password: password,
+      collectedCards: [],
+      duplicates: {},
+      redeemedCodes: [],
+      pendingTrades: []
+    };
+    localStorage.setItem("usersData", JSON.stringify(usersData));
+    alert("Account creato con successo!");
+  } else {
+    // Verifica la password se l'utente esiste
+    if (usersData[username].password !== password) {
+      alert("Password errata");
+      return;
+    }
+  }
+
+  currentUser = username;
+  document.querySelector('.login-container').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  updateCardsCount();
+  updateDuplicatesCount();
+  if (document.getElementById('trade').classList.contains('active')) {
+    showTradePage();
+  }
+
+      currentUser = username;
+      document.querySelector('.login-container').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      updateCardsCount();
+      updateDuplicatesCount();
+      if (document.getElementById('trade').classList.contains('active')) {
+        showTradePage();
+      }
+    }
+
+    // Funzione di logout
+    function logout() {
+      currentUser = null;
+      document.getElementById('mainApp').style.display = 'none';
+      document.querySelector('.login-container').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function showPage(id, event) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+      
+      if (id === 'album') {
+        updateAlbum();
+      } else if (id === 'trade') {
+        showTradePage();
+      }
+    }
+
+    function showTradePage() {
+      if (!currentUser) return;
+      
+      // Mostra la lista degli utenti disponibili per lo scambio
+      updateUserList();
+      
+      // Mostra gli scambi in attesa
+      updatePendingTrades();
+    }
+
+    function updateUserList() {
+      const userListEl = document.getElementById('userList');
+      userListEl.innerHTML = '';
+      
+      Object.keys(usersData).forEach(username => {
+        if (username !== currentUser) {
+          const userItem = document.createElement('div');
+          userItem.className = 'user-item';
+          userItem.textContent = username;
+          userItem.onclick = () => selectUser(username);
+          userListEl.appendChild(userItem);
+        }
+      });
+    }
+
+    function selectUser(username) {
+      selectedTradeUser = username;
+      
+      // Rimuovi la selezione precedente
+      document.querySelectorAll('.user-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      
+      // Aggiungi la selezione all'utente cliccato
+      event.target.classList.add('selected');
+      
+      // Mostra le sezioni per lo scambio
+      document.getElementById('offerSection').style.display = 'block';
+      document.getElementById('requestSection').style.display = 'block';
+      document.getElementById('tradeActions').style.display = 'flex';
+      
+      // Mostra le carte disponibili per lo scambio
+      showMyCardsForTrade();
+      showTheirCardsForTrade();
+    }
+
+    function showMyCardsForTrade() {
+      const myCardsSelection = document.getElementById('myCardsSelection');
+      myCardsSelection.innerHTML = '';
+      
+      // Trova i doppioni dell'utente corrente
+      const duplicates = usersData[currentUser].duplicates;
+      
+      Object.keys(duplicates).forEach(cardKey => {
+        if (duplicates[cardKey] > 0) {
+          const [team, player] = cardKey.split('|');
+          const cardEl = document.createElement('div');
+          cardEl.className = 'trade-card';
+          cardEl.textContent = `${player} (${team})`;
+          cardEl.onclick = () => selectOfferCard(cardKey, cardEl);
+          myCardsSelection.appendChild(cardEl);
+        }
+      });
+    }
+
+    function showTheirCardsForTrade() {
+      const theirCardsSelection = document.getElementById('theirCardsSelection');
+      theirCardsSelection.innerHTML = '';
+      
+      // Trova i doppioni dell'altro utente
+      const duplicates = usersData[selectedTradeUser].duplicates;
+      
+      Object.keys(duplicates).forEach(cardKey => {
+        if (duplicates[cardKey] > 0) {
+          const [team, player] = cardKey.split('|');
+          const cardEl = document.createElement('div');
+          cardEl.className = 'trade-card';
+          cardEl.textContent = `${player} (${team})`;
+          cardEl.onclick = () => selectRequestCard(cardKey, cardEl);
+          theirCardsSelection.appendChild(cardEl);
+        }
+      });
+    }
+
+    function selectOfferCard(cardKey, cardEl) {
+      selectedOfferCard = cardKey;
+      
+      // Rimuovi la selezione precedente
+      document.querySelectorAll('#myCardsSelection .trade-card').forEach(item => {
+        item.classList.remove('selected');
+      });
+      
+      // Aggiungi la selezione alla carta cliccata
+      cardEl.classList.add('selected');
+    }
+
+    function selectRequestCard(cardKey, cardEl) {
+      selectedRequestCard = cardKey;
+      
+      // Rimuovi la selezione precedente
+      document.querySelectorAll('#theirCardsSelection .trade-card').forEach(item => {
+        item.classList.remove('selected');
+      });
+      
+      // Aggiungi la selezione alla carta cliccata
+      cardEl.classList.add('selected');
+    }
+
+    function proposeTrade() {
+      if (!selectedOfferCard || !selectedRequestCard) {
+        alert("Seleziona sia la carta da offrire che quella da ricevere");
+        return;
+      }
+      
+      // Crea la proposta di scambio
+      const tradeProposal = {
+        from: currentUser,
+        to: selectedTradeUser,
+        offerCard: selectedOfferCard,
+        requestCard: selectedRequestCard,
+        status: "pending",
+        timestamp: new Date().getTime()
+      };
+      
+      // Aggiungi la proposta alla lista degli scambi in attesa dell'altro utente
+      if (!usersData[selectedTradeUser].pendingTrades) {
+        usersData[selectedTradeUser].pendingTrades = [];
+      }
+      usersData[selectedTradeUser].pendingTrades.push(tradeProposal);
+      
+      // Salva i dati aggiornati
+      localStorage.setItem("usersData", JSON.stringify(usersData));
+      
+      alert("Scambio proposto con successo! L'altro utente vedrà la tua proposta quando farà login.");
+      
+      // Resetta la selezione
+      resetTradeSelection();
+      updatePendingTrades();
+    }
+
+    function updatePendingTrades() {
+      const pendingTradesList = document.getElementById('pendingTradesList');
+      pendingTradesList.innerHTML = '';
+      
+      if (!usersData[currentUser].pendingTrades || usersData[currentUser].pendingTrades.length === 0) {
+        pendingTradesList.innerHTML = '<p>Nessuno scambio in attesa</p>';
+        return;
+      }
+      
+      usersData[currentUser].pendingTrades.forEach((trade, index) => {
+        if (trade.status === "pending") {
+          const [offerTeam, offerPlayer] = trade.offerCard.split('|');
+          const [requestTeam, requestPlayer] = trade.requestCard.split('|');
+          
+          const tradeItem = document.createElement('div');
+          tradeItem.className = 'trade-item';
+          tradeItem.innerHTML = `
+            <div class="trade-info">
+              <p><strong>Da:</strong> ${trade.from}</p>
+              <p><strong>Offre:</strong> ${offerPlayer} (${offerTeam})</p>
+              <p><strong>Richiede:</strong> ${requestPlayer} (${requestTeam})</p>
+            </div>
+            <div class="trade-actions">
+              <button class="trade-btn accept-btn" onclick="acceptTrade(${index})">Accetta</button>
+              <button class="trade-btn reject-btn" onclick="rejectTrade(${index})">Rifiuta</button>
+            </div>
+          `;
+          pendingTradesList.appendChild(tradeItem);
+        }
+      });
+    }
+
+    function acceptTrade(index) {
+      const trade = usersData[currentUser].pendingTrades[index];
+      
+      // Esegui lo scambio
+      executeTrade(trade.from, currentUser, trade.offerCard, trade.requestCard);
+      
+      // Rimuovi la proposta dalla lista
+      usersData[currentUser].pendingTrades.splice(index, 1);
+      
+      // Salva i dati aggiornati
+      localStorage.setItem("usersData", JSON.stringify(usersData));
+      
+      alert("Scambio completato con successo!");
+      updatePendingTrades();
+      updateAlbum();
+      updateCardsCount();
+      updateDuplicatesCount();
+    }
+
+    function rejectTrade(index) {
+      // Rimuovi semplicemente la proposta
+      usersData[currentUser].pendingTrades.splice(index, 1);
+      localStorage.setItem("usersData", JSON.stringify(usersData));
+      
+      updatePendingTrades();
+      alert("Scambio rifiutato");
+    }
+
+    function executeTrade(fromUser, toUser, offerCard, requestCard) {
+      // Rimuovi la carta offerta dai doppioni del mittente e aggiungila al destinatario
+      usersData[fromUser].duplicates[offerCard]--;
+      addCardToUser(toUser, offerCard);
+      
+      // Rimuovi la carta richiesta dai doppioni del destinatario e aggiungila al mittente
+      usersData[toUser].duplicates[requestCard]--;
+      addCardToUser(fromUser, requestCard);
+    }
+
+    function addCardToUser(username, cardKey) {
+      const [team, player] = cardKey.split('|');
+      
+      // Aggiungi la carta all'album dell'utente
+      usersData[username].collectedCards.push({ team, player });
+      
+      // Aggiorna i doppioni
+      if (!usersData[username].duplicates[cardKey]) {
+        usersData[username].duplicates[cardKey] = 0;
+      }
+      usersData[username].duplicates[cardKey]++;
+    }
+
+    function resetTradeSelection() {
+      selectedTradeUser = null;
+      selectedOfferCard = null;
+      selectedRequestCard = null;
+      
+      document.getElementById('offerSection').style.display = 'none';
+      document.getElementById('requestSection').style.display = 'none';
+      document.getElementById('tradeActions').style.display = 'none';
+      
+      document.querySelectorAll('.user-item.selected').forEach(item => {
+        item.classList.remove('selected');
+      });
+    }
+
+    function redeemCode() {
+      if (!currentUser) {
+        alert("Devi essere loggato per riscattare un codice");
+        return;
+      }
+
+      const codeInput = document.getElementById('redeemCode');
+      const code = codeInput.value.trim().toUpperCase();
+      const messageEl = document.getElementById('redeemMessage');
+
+      if (!/^[A-Z0-9]{6,15}$/.test(code)) {
+        messageEl.innerHTML = '<div class="error-message">Codice non valido! Usa solo lettere e numeri (6-15 caratteri).</div>';
+        return;
+      }
+
+      if (!validCodes.includes(code)) {
+        messageEl.innerHTML = '<div class="error-message">Codice non riconosciuto dal sistema.</div>';
+        return;
+      }
+
+      if (usersData[currentUser].redeemedCodes.includes(code)) {
+        messageEl.innerHTML = '<div class="error-message">Codice già riscattato.</div>';
+        return;
+      }
+
+      // Aggiungi il codice ai codici riscattati dall'utente
+      usersData[currentUser].redeemedCodes.push(code);
+      
+      // Aggiungi 5 figurine casuali all'album dell'utente
+      for (let i = 0; i < 5; i++) {
+        const team = teams[Math.floor(Math.random() * teams.length)];
+        const player = team.players[Math.floor(Math.random() * team.players.length)];
+        const cardKey = `${team.name}|${player}`;
+        
+        // Aggiungi la carta all'album
+        usersData[currentUser].collectedCards.push({ team: team.name, player });
+        
+        // Aggiorna i doppioni
+        if (!usersData[currentUser].duplicates[cardKey]) {
+          usersData[currentUser].duplicates[cardKey] = 0;
+        }
+        usersData[currentUser].duplicates[cardKey]++;
+      }
+      
+      // Salva i dati aggiornati
+      localStorage.setItem("usersData", JSON.stringify(usersData));
+
+      messageEl.innerHTML = '<div class="success-message">Codice riscattato con successo! Hai ottenuto 5 figurine.</div>';
+      codeInput.value = '';
+      updateCardsCount();
+      updateDuplicatesCount();
+    }
+
+    function updateCardsCount() {
+      if (!currentUser) return;
+      const count = usersData[currentUser].collectedCards.length;
+      document.getElementById('cardsCount').innerText = count;
+    }
+
+    function updateDuplicatesCount() {
+      if (!currentUser) return;
+      const duplicates = usersData[currentUser].duplicates;
+      let count = 0;
+      
+      Object.keys(duplicates).forEach(key => {
+        count += duplicates[key] > 1 ? duplicates[key] - 1 : 0;
+      });
+      
+      document.getElementById('duplicatesCount').innerText = count;
+    }
+
+    function updateAlbum() {
+      if (!currentUser) return;
+      
+      const grid = document.getElementById('albumGrid');
+      grid.innerHTML = '';
+
+      // Raggruppa le carte per squadra
+      const grouped = {};
+      usersData[currentUser].collectedCards.forEach(card => {
+        if (!grouped[card.team]) grouped[card.team] = new Set();
+        grouped[card.team].add(card.player);
+      });
+
+      // Crea una card per ogni squadra con i giocatori raccolti
+      Object.keys(grouped).forEach(team => {
+        const playersList = Array.from(grouped[team]).join(', ');
+        const div = document.createElement('div');
+        div.className = 'team-card';
+        div.innerHTML = `
+          <div class="team-logo">${team.charAt(0)}</div>
+          <div class="team-name">${team}</div>
+          <div class="team-stats">${playersList}</div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
