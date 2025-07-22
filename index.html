@@ -573,34 +573,25 @@
     </div>
 
     <div id="trade" class="page">
-      <h2 class="page-title">Scambi</h2>
-      <div class="trade-container">
-        <div class="trade-section">
-          <h3 class="trade-section-title">Seleziona un utente</h3>
-          <div class="user-list" id="userList"></div>
-        </div>
+    <h2 class="page-title">Scambi</h2>
+    <div class="trade-container">
+      <div class="trade-section">
+        <h3 class="trade-section-title">Seleziona un utente</h3>
+        <div class="user-list" id="userList"></div>
+      </div>
 
-        <div class="trade-section" id="offerSection" style="display: none;">
-          <h3 class="trade-section-title">Seleziona la tua carta da offrire</h3>
-          <div class="card-selection" id="myCardsSelection"></div>
-        </div>
+      <div class="trade-section" id="offerSection" style="display: none;">
+        <h3 class="trade-section-title">Seleziona la tua carta da offrire</h3>
+        <div class="card-selection" id="myCardsSelection"></div>
+        <button class="btn" id="proposeTradeBtn" style="display: none; margin-top: 20px;" onclick="proposeTrade()">Proponi scambio</button>
+      </div>
 
-        <div class="trade-section" id="requestSection" style="display: none;">
-          <h3 class="trade-section-title">Seleziona la carta che vuoi ricevere</h3>
-          <div class="card-selection" id="theirCardsSelection"></div>
-        </div>
-
-        <div class="trade-actions" id="tradeActions" style="display: none;">
-          <button class="trade-btn accept-btn" onclick="proposeTrade()">Proponi scambio</button>
-        </div>
-
-        <div class="pending-trades" id="pendingTradesSection">
-          <h3 class="trade-section-title">Scambi in attesa</h3>
-          <div id="pendingTradesList"></div>
-        </div>
+      <div class="pending-trades" id="pendingTradesSection">
+        <h3 class="trade-section-title">Scambi in attesa</h3>
+        <div id="pendingTradesList"></div>
       </div>
     </div>
-
+  </div>
     <div id="buy" class="page">
       <h2 class="page-title">Comprare Codici</h2>
       <div class="buy-info">
@@ -823,9 +814,9 @@ function login() {
       cardEl.classList.add('selected');
     }
 
-    function proposeTrade() {
-      if (!selectedOfferCard || !selectedRequestCard) {
-        alert("Seleziona sia la carta da offrire che quella da ricevere");
+function proposeTrade() {
+      if (!selectedOfferCard) {
+        alert("Seleziona una carta da offrire");
         return;
       }
       
@@ -834,7 +825,6 @@ function login() {
         from: currentUser,
         to: selectedTradeUser,
         offerCard: selectedOfferCard,
-        requestCard: selectedRequestCard,
         status: "pending",
         timestamp: new Date().getTime()
       };
@@ -848,7 +838,7 @@ function login() {
       // Salva i dati aggiornati
       localStorage.setItem("usersData", JSON.stringify(usersData));
       
-      alert("Scambio proposto con successo! L'altro utente vedrà la tua proposta quando farà login.");
+      alert("Scambio proposto con successo! L'altro utente potrà scegliere quale carta darti in cambio.");
       
       // Resetta la selezione
       resetTradeSelection();
@@ -867,7 +857,6 @@ function login() {
       usersData[currentUser].pendingTrades.forEach((trade, index) => {
         if (trade.status === "pending") {
           const [offerTeam, offerPlayer] = trade.offerCard.split('|');
-          const [requestTeam, requestPlayer] = trade.requestCard.split('|');
           
           const tradeItem = document.createElement('div');
           tradeItem.className = 'trade-item';
@@ -875,11 +864,15 @@ function login() {
             <div class="trade-info">
               <p><strong>Da:</strong> ${trade.from}</p>
               <p><strong>Offre:</strong> ${offerPlayer} (${offerTeam})</p>
-              <p><strong>Richiede:</strong> ${requestPlayer} (${requestTeam})</p>
-            </div>
-            <div class="trade-actions">
-              <button class="trade-btn accept-btn" onclick="acceptTrade(${index})">Accetta</button>
-              <button class="trade-btn reject-btn" onclick="rejectTrade(${index})">Rifiuta</button>
+              <div id="responseSection${index}" style="margin-top: 15px; display: none;">
+                <h4>Scegli la tua carta da scambiare:</h4>
+                <div class="card-selection" id="responseCards${index}"></div>
+                <div class="trade-actions" style="margin-top: 15px;">
+                  <button class="trade-btn accept-btn" onclick="completeTrade(${index})">Conferma scambio</button>
+                  <button class="trade-btn reject-btn" onclick="rejectTrade(${index})">Rifiuta</button>
+                </div>
+              </div>
+              <button class="btn" style="margin-top: 10px;" onclick="showResponseOptions(${index})">Rispondi allo scambio</button>
             </div>
           `;
           pendingTradesList.appendChild(tradeItem);
@@ -887,11 +880,54 @@ function login() {
       });
     }
 
-    function acceptTrade(index) {
+    function showResponseOptions(index) {
+      const responseSection = document.getElementById(`responseSection${index}`);
+      const responseCards = document.getElementById(`responseCards${index}`);
+      
+      if (responseSection.style.display === 'none') {
+        // Mostra le carte disponibili per lo scambio
+        responseCards.innerHTML = '';
+        
+        // Trova i doppioni dell'utente corrente
+        const duplicates = usersData[currentUser].duplicates;
+        
+        Object.keys(duplicates).forEach(cardKey => {
+          if (duplicates[cardKey] > 0) {
+            const [team, player] = cardKey.split('|');
+            const cardEl = document.createElement('div');
+            cardEl.className = 'trade-card';
+            cardEl.textContent = `${player} (${team})`;
+            cardEl.onclick = function() {
+              // Rimuovi la selezione precedente
+              document.querySelectorAll(`#responseCards${index} .trade-card`).forEach(item => {
+                item.classList.remove('selected');
+              });
+              // Aggiungi la selezione alla carta cliccata
+              this.classList.add('selected');
+              // Salva la carta selezionata
+              usersData[currentUser].pendingTrades[index].responseCard = cardKey;
+              localStorage.setItem("usersData", JSON.stringify(usersData));
+            };
+            responseCards.appendChild(cardEl);
+          }
+        });
+        
+        responseSection.style.display = 'block';
+      } else {
+        responseSection.style.display = 'none';
+      }
+    }
+
+    function completeTrade(index) {
       const trade = usersData[currentUser].pendingTrades[index];
       
+      if (!trade.responseCard) {
+        alert("Seleziona una carta da scambiare");
+        return;
+      }
+      
       // Esegui lo scambio
-      executeTrade(trade.from, currentUser, trade.offerCard, trade.requestCard);
+      executeTrade(trade.from, currentUser, trade.offerCard, trade.responseCard);
       
       // Rimuovi la proposta dalla lista
       usersData[currentUser].pendingTrades.splice(index, 1);
